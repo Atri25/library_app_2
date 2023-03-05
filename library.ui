@@ -122,7 +122,7 @@
      </font>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -138,7 +138,7 @@
        </rect>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab_22">
        <attribute name="title">
@@ -256,6 +256,11 @@
         </column>
         <column>
          <property name="text">
+          <string>Issued</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
           <string>From</string>
          </property>
         </column>
@@ -312,6 +317,19 @@
           <width>211</width>
           <height>41</height>
          </rect>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButton_30">
+        <property name="geometry">
+         <rect>
+          <x>30</x>
+          <y>400</y>
+          <width>101</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Update</string>
         </property>
        </widget>
       </widget>
@@ -426,7 +444,12 @@
         </column>
         <column>
          <property name="text">
-          <string>Teacher Subject</string>
+          <string>Subject</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Issued</string>
          </property>
         </column>
         <column>
@@ -487,6 +510,19 @@
           <width>211</width>
           <height>41</height>
          </rect>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButton_31">
+        <property name="geometry">
+         <rect>
+          <x>30</x>
+          <y>400</y>
+          <width>101</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Update</string>
         </property>
        </widget>
       </widget>

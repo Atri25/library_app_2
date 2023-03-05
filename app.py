@@ -117,6 +117,10 @@ class MainApp(QMainWindow, ui):
         self.pushButton_21.clicked.connect(self.Dark_Gray_Theme)
         self.pushButton_20.clicked.connect(self.QDark_Theme)
 
+        # update operation
+        self.pushButton_30.clicked.connect(self.updateOperation_Student)
+        self.pushButton_31.clicked.connect(self.updateOperation_Teacher)
+
 
 
     def Show_Themes(self):
@@ -146,7 +150,7 @@ class MainApp(QMainWindow, ui):
         self.cur = self.db.cursor()
 
         self.cur.execute(''' 
-            SELECT book_name , student_name , student_class , date , date_to FROM dayoperations_student
+            SELECT book_name , student_name , student_class , book_issued, date , date_to FROM dayoperations_student
         ''')
 
         data = self.cur.fetchall()
@@ -166,12 +170,10 @@ class MainApp(QMainWindow, ui):
         self.cur = self.db.cursor()
 
         self.cur.execute(''' 
-            SELECT book_name , teacher_name , teacher_subject , date , date_to FROM dayoperations_teacher
+            SELECT book_name , teacher_name , teacher_subject , book_issued ,date , date_to FROM dayoperations_teacher
         ''')
 
         data = self.cur.fetchall()
-
-        # print(data)
 
         self.tableWidget_3.setRowCount(0)
         self.tableWidget_3.insertRow(0)
@@ -180,7 +182,7 @@ class MainApp(QMainWindow, ui):
                 self.tableWidget_3.setItem(row , column , QTableWidgetItem(str(item)))
                 column += 1
 
-            row_position = self.tableWidget.rowCount()
+            row_position = self.tableWidget_3.rowCount()
             self.tableWidget_3.insertRow(row_position)
         
     def HandleOperationsStudent(self):
@@ -199,16 +201,48 @@ class MainApp(QMainWindow, ui):
             INSERT INTO dayoperations_student(book_name,student_name,student_class,days,date,date_to)
             VALUES (%s , %s , %s , %s ,%s , %s )
         ''' ,(book_title , student_name , student_class ,days,today_date,to_date))
-        self.cur.execute('''UPDATE book,dayoperations_student SET book.book_issued="YES" WHERE dayoperations_student.book_name=book.book_name ''')
 
         self.db.commit()
         self.statusBar().showMessage('New Operation Added')
-
 
         self.lineEdit_29.setText('')
         self.lineEdit_57.setText('')
         self.comboBox_2.setCurrentIndex(0)
         self.Show_All_Operations_Student()
+
+    def updateOperation_Student(self):
+        self.db = MySQLdb.connect(host='127.0.0.1',user='root',password='',db='library',port=3306)
+        self.cur = self.db.cursor()
+
+        index = self.tableWidget.selectionModel().currentIndex()
+        row = index.row()
+        row_ = row+1
+        
+        #########Taking values############ 
+        value_title = index.sibling(index.row(),0).data()
+        value_name = index.sibling(index.row(),1).data()
+        value_class = index.sibling(index.row(),2).data()
+        value_issued = index.sibling(index.row(),3).data()
+        value_from = index.sibling(index.row(),4).data()
+        value_to = index.sibling(index.row(),5).data()
+
+        #########Setting the values########### 
+        book_title = value_title
+        book_issued = value_issued
+        book_class = value_class
+        book_name = value_name
+        book_from = value_from
+        book_to = value_to
+        # book_price = value_price
+
+
+        # print(value)
+        self.cur.execute('''
+            UPDATE dayoperations_student SET book_name=%s,student_name=%s,student_class=%s,book_issued=%s,date=%s,date_to=%s WHERE id = %s            
+        ''', (book_title, book_name,book_class,book_issued,book_from,book_to,row_))
+        self.cur.execute('''UPDATE book,dayoperations_student SET book.book_issued=dayoperations_student.book_issued WHERE dayoperations_student.book_name=book.book_name''')
+        self.db.commit()
+        self.statusBar().showMessage('Book Updated')
 
     def HandleOperationsTeacher(self):
         self.db = MySQLdb.connect(host='127.0.0.1',user='root',password='',db='library',port=3306)
@@ -225,7 +259,7 @@ class MainApp(QMainWindow, ui):
             INSERT INTO dayoperations_teacher(book_name,teacher_name,teacher_subject,days,date,date_to)
             VALUES (%s , %s , %s , %s ,%s , %s )
         ''' ,(book_title , teacher_name , teacher_subject ,days,today_date,to_date))
-        self.cur.execute('''UPDATE book,dayoperations_teacher SET book.book_issued="YES" WHERE dayoperations_teacher.book_name=book.book_name ''')
+        # self.cur.execute('''UPDATE book,dayoperations_teacher SET book.book_issued="YES" WHERE dayoperations_teacher.book_name=book.book_name ''')
         self.db.commit()
         self.statusBar().showMessage('New Operation Added')
 
@@ -233,6 +267,38 @@ class MainApp(QMainWindow, ui):
         self.lineEdit_58.setText('')
         self.comboBox_8.setCurrentIndex(0)
         self.Show_All_Operations_Teacher()
+
+    def updateOperation_Teacher(self):
+        self.db = MySQLdb.connect(host='127.0.0.1',user='root',password='',db='library',port=3306)
+        self.cur = self.db.cursor()
+
+        index = self.tableWidget_3.selectionModel().currentIndex()
+        row = index.row()
+        row_ = row+1
+        
+        #########Taking values############ 
+        value_title = index.sibling(index.row(),0).data()
+        value_name = index.sibling(index.row(),1).data()
+        value_subject = index.sibling(index.row(),2).data()
+        value_issued = index.sibling(index.row(),3).data()
+        value_from = index.sibling(index.row(),4).data()
+        value_to = index.sibling(index.row(),5).data()
+
+        #########Setting the values########### 
+        book_title = value_title
+        book_issued = value_issued
+        book_subject = value_subject
+        book_name = value_name
+        book_from = value_from
+        book_to = value_to
+
+        # print(value)
+        self.cur.execute('''
+            UPDATE dayoperations_teacher SET book_name=%s,teacher_name=%s,teacher_subject=%s,book_issued=%s,date=%s,date_to=%s WHERE id = %s            
+        ''', (book_title, book_name,book_subject,book_issued,book_from,book_to,row_))
+        self.cur.execute('''UPDATE book,dayoperations_teacher SET book.book_issued=dayoperations_teacher.book_issued WHERE dayoperations_teacher.book_name=book.book_name''')
+        self.db.commit()
+        self.statusBar().showMessage('Book Updated')
 
 
 
@@ -269,7 +335,15 @@ class MainApp(QMainWindow, ui):
             row = index.row()
             row_ = row+1
             self.cur.execute('''DELETE FROM book WHERE id = %s''' ,[(row_)])
-        self.db.commit()
+            self.db.commit()
+            self.cur.execute('''
+            SET @num := 0;
+
+            UPDATE book SET id = @num := (@num+1);
+
+            ALTER TABLE book AUTO_INCREMENT = 1;
+            
+            ''' )
         self.ShowAllBooks()
 
     def updateSelected(self):
@@ -279,9 +353,6 @@ class MainApp(QMainWindow, ui):
         index = self.tableWidget_5.selectionModel().currentIndex()
         row = index.row()
         row_ = row+1
-        # print(row+1)
-        # id = self.lineEdit_39.text()
-        # value=index.sibling(index.row(),index.column()).data()
         
         #########Taking values############ 
         value_title = index.sibling(index.row(),0).data()
