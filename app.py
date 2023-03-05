@@ -4,14 +4,49 @@ from PyQt5.QtWidgets import *
 import sys
 import MySQLdb
 import datetime
-
 from PyQt5.uic import loadUiType
+# from xlrd import *
+from xlsxwriter import *
 
 ui,_ = loadUiType('library.ui')
+
+login,_ = loadUiType('login.ui')
+
+class Login(QWidget , login):
+    def __init__(self):
+        QWidget.__init__(self)
+        self.setupUi(self)
+        self.pushButton.clicked.connect(self.Handel_Login)
+
+    def Handel_Login(self):
+        self.db = MySQLdb.connect(host='127.0.0.1',user='root',password='',db='library',port=3306)
+        self.cur = self.db.cursor()
+
+        username = self.lineEdit.text()
+        password = self.lineEdit_2.text()
+
+        sql = ''' SELECT * FROM users'''
+
+        self.cur.execute(sql)
+        data = self.cur.fetchall()
+        for row in data  :
+            if username == row[1] and password == row[3]:
+                # print('user match')
+                self.window2 = MainApp()
+                self.close()
+                self.window2.show()
+
+            else:
+                self.label.setText('Make Sure You Enterd Your Username And Password Correctly')
+
+
 
 class MainApp(QMainWindow, ui):
     def __init__(self):
         QMainWindow.__init__(self)
+        style = open('themes/qdark.css' , 'r')
+        style = style.read()
+        self.setStyleSheet(style)
         self.setupUi(self)
         self.Handel_ui_change()
         self.Handel_Buttons()
@@ -36,7 +71,6 @@ class MainApp(QMainWindow, ui):
         self.pushButton.clicked.connect(self.Open_day_to_day_tab)
         self.pushButton_2.clicked.connect(self.Open_books_tab)
         self.pushButton_26.clicked.connect(self.Open_Users_tab)
-        self.pushButton_30.clicked.connect(self.Open_Client_tab)
         self.pushButton_4.clicked.connect(self.Open_Settings_tab)
 
         # add book
@@ -70,7 +104,18 @@ class MainApp(QMainWindow, ui):
 
         #edit user data
         self.pushButton_13.clicked.connect(self.Edituser)
+
+        # export books
+        self.pushButton_27.clicked.connect(self.Export_Books)
         
+        # export operations
+        self.pushButton_29.clicked.connect(self.Export_Day_Operation_Student)
+
+        # Themes
+        self.pushButton_19.clicked.connect(self.Dark_Orange_Theme)
+        self.pushButton_18.clicked.connect(self.Dark_Blue_Theme)
+        self.pushButton_21.clicked.connect(self.Dark_Gray_Theme)
+        self.pushButton_20.clicked.connect(self.QDark_Theme)
 
 
 
@@ -88,11 +133,10 @@ class MainApp(QMainWindow, ui):
     def Open_books_tab(self):
         self.tabWidget.setCurrentIndex(1)
     def Open_Users_tab(self):
-        self.tabWidget.setCurrentIndex(3)
-    def Open_Settings_tab(self):
-        self.tabWidget.setCurrentIndex(4)
-    def Open_Client_tab(self):
         self.tabWidget.setCurrentIndex(2)
+    def Open_Settings_tab(self):
+        self.tabWidget.setCurrentIndex(3)
+
     
     ######################################
     #############Operations###############
@@ -189,6 +233,8 @@ class MainApp(QMainWindow, ui):
         self.lineEdit_58.setText('')
         self.comboBox_8.setCurrentIndex(0)
         self.Show_All_Operations_Teacher()
+
+
 
     #################################
     #############Books###############
@@ -309,7 +355,7 @@ class MainApp(QMainWindow, ui):
         sql = '''SELECT book_name,book_description,book_code,book_issued,book_category,book_author,book_publisher,book_price FROM book WHERE book_name=%s'''
         if self.cur.execute(sql , [(book_title)],):
             data = self.cur.fetchall()
-            self.tableWidget_8.setRowCount(5)
+            self.tableWidget_8.setRowCount(0)
             self.tableWidget_8.insertRow(0)
 
             for row, form in enumerate(data):
@@ -319,6 +365,7 @@ class MainApp(QMainWindow, ui):
 
                 row_position = self.tableWidget_8.rowCount()
                 self.tableWidget_5.insertRow(row_position)
+
 
             self.db.close()
 
@@ -421,7 +468,7 @@ class MainApp(QMainWindow, ui):
         data = self.cur.fetchall()
         for row in data  :
             if username == row[1] and password == row[3]:
-                print('user match')
+                # print('user match')
                 self.statusBar().showMessage('Valid Username & Password')
                 self.groupBox_4.setEnabled(True)
 
@@ -444,9 +491,9 @@ class MainApp(QMainWindow, ui):
             self.db = MySQLdb.connect(host='127.0.0.1',user='root',password='',db='library',port=3306)
             self.cur = self.db.cursor()
 
-            print(username)
-            print(email)
-            print(password)
+            # print(username)
+            # print(email)
+            # print(password)
 
             self.cur.execute('''
                 UPDATE users SET user_name=%s , user_email=%s , user_pass=%s WHERE user_name=%s
@@ -456,17 +503,96 @@ class MainApp(QMainWindow, ui):
             self.statusBar().showMessage('User Data Updated Successfully')
 
         else:
-            print('make sure you entered you password correctly')
+            self.statusBar().showMessage('User Data NOT Updated ')
+            # print('make sure you entered you password correctly')
+
+    def Export_Books(self):
+        self.db = MySQLdb.connect(host='127.0.0.1',user='root',password='',db='library',port=3306)
+        self.cur = self.db.cursor()
+
+        self.cur.execute(''' SELECT book_code,book_name,book_description,book_category,book_author,book_publisher,book_price FROM book''')
+        data = self.cur.fetchall()
+
+        wb = Workbook('all_books.xlsx')
+        sheet1 = wb.add_worksheet()
+
+        sheet1.write(0,0 , 'Book Code')
+        sheet1.write(0,1 , 'Book Name')
+        sheet1.write(0,2 , 'Book Description')
+        sheet1.write(0,3 , 'Book Category')
+        sheet1.write(0,4 , 'Book Author')
+        sheet1.write(0,5 , 'Book publisher')
+        sheet1.write(0,6 , 'Book Price')
 
 
+        row_number = 1
+        for row in data :
+            column_number = 0
+            for item in row :
+                sheet1.write(row_number , column_number , str(item))
+                column_number += 1
+            row_number += 1
+
+        wb.close()
+        self.statusBar().showMessage('Book Report Created Successfully')
+
+    def Export_Day_Operation_Student(self):
+        self.db = MySQLdb.connect(host='127.0.0.1',user='root',password='',db='library',port=3306)
+        self.cur = self.db.cursor()
+
+        self.cur.execute(''' 
+            SELECT book_name , student_name , student_class , date , date_to FROM dayoperations_student
+        ''')
+
+        data = self.cur.fetchall()
+        wb = Workbook('day_operations.xlsx')
+        sheet1  = wb.add_worksheet()
+
+        sheet1.write(0,0,'book title')
+        sheet1.write(0,1,'student name')
+        sheet1.write(0,2,'student class')
+        sheet1.write(0,3,'from - date')
+        sheet1.write(0,4,'to - date')
+
+
+        row_number = 1
+        for row in data :
+            column_number = 0
+            for item in row :
+                sheet1.write(row_number , column_number , str(item))
+                column_number += 1
+            row_number += 1
+
+        wb.close()
+        self.statusBar().showMessage('Report Created Successfully')
+
+    def Dark_Blue_Theme(self):
+        style = open('themes/darkblue.css' , 'r')
+        style = style.read()
+        self.setStyleSheet(style)
+
+    def Dark_Gray_Theme(self):
+        style = open('themes/darkgray.css' , 'r')
+        style = style.read()
+        self.setStyleSheet(style)
+
+    def Dark_Orange_Theme(self):
+        style = open('themes/darkorange.css' , 'r')
+        style = style.read()
+        self.setStyleSheet(style)
+
+    def QDark_Theme(self):
+        style = open('themes/qdark.css' , 'r')
+        style = style.read()
+        self.setStyleSheet(style)
 
 def main():
     app = QApplication(sys.argv)
-    window = MainApp()
+    window = Login()
     window.show()
     app.exec_()
 
-if __name__ == "__main__":
-    main()
 
+if __name__ == '__main__':
+    main()
         

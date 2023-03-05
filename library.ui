@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow">
+ <class>Library</class>
+ <widget class="QMainWindow" name="Library">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -64,7 +64,7 @@
     <property name="geometry">
      <rect>
       <x>40</x>
-      <y>350</y>
+      <y>270</y>
       <width>71</width>
       <height>71</height>
      </rect>
@@ -87,7 +87,7 @@
     <property name="geometry">
      <rect>
       <x>40</x>
-      <y>430</y>
+      <y>350</y>
       <width>71</width>
       <height>71</height>
      </rect>
@@ -132,13 +132,13 @@
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>10</y>
+        <y>0</y>
         <width>1011</width>
         <height>481</height>
        </rect>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tab_22">
        <attribute name="title">
@@ -506,7 +506,7 @@
        </rect>
       </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tab_10">
        <attribute name="title">
@@ -940,6 +940,11 @@
         </column>
         <column>
          <property name="text">
+          <string>Issued</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
           <string>Category</string>
          </property>
         </column>
@@ -958,344 +963,6 @@
           <string>Price</string>
          </property>
         </column>
-       </widget>
-      </widget>
-     </widget>
-    </widget>
-    <widget class="QWidget" name="tab_11">
-     <attribute name="title">
-      <string>Page</string>
-     </attribute>
-     <widget class="QTabWidget" name="tabWidget_4">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>1021</width>
-        <height>511</height>
-       </rect>
-      </property>
-      <property name="currentIndex">
-       <number>2</number>
-      </property>
-      <widget class="QWidget" name="tab_12">
-       <attribute name="title">
-        <string>All Clients</string>
-       </attribute>
-       <widget class="QTableWidget" name="tableWidget_6">
-        <property name="geometry">
-         <rect>
-          <x>0</x>
-          <y>0</y>
-          <width>1011</width>
-          <height>421</height>
-         </rect>
-        </property>
-        <column>
-         <property name="text">
-          <string>Client Name</string>
-         </property>
-        </column>
-        <column>
-         <property name="text">
-          <string>Client Email</string>
-         </property>
-        </column>
-        <column>
-         <property name="text">
-          <string>Client National Id</string>
-         </property>
-        </column>
-       </widget>
-       <widget class="QPushButton" name="pushButton_28">
-        <property name="geometry">
-         <rect>
-          <x>640</x>
-          <y>430</y>
-          <width>341</width>
-          <height>41</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Export Clients To Excel File</string>
-        </property>
-       </widget>
-      </widget>
-      <widget class="QWidget" name="tab_13">
-       <attribute name="title">
-        <string>Add New Client</string>
-       </attribute>
-       <widget class="QLineEdit" name="lineEdit_22">
-        <property name="geometry">
-         <rect>
-          <x>330</x>
-          <y>60</y>
-          <width>281</width>
-          <height>41</height>
-         </rect>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="pushButton_22">
-        <property name="geometry">
-         <rect>
-          <x>330</x>
-          <y>330</y>
-          <width>211</width>
-          <height>51</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <family>Segoe UI</family>
-          <pointsize>21</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>Add New Client</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="label_31">
-        <property name="geometry">
-         <rect>
-          <x>140</x>
-          <y>60</y>
-          <width>161</width>
-          <height>31</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <family>Segoe UI</family>
-          <pointsize>20</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>Client Name</string>
-        </property>
-       </widget>
-       <widget class="QLineEdit" name="lineEdit_23">
-        <property name="geometry">
-         <rect>
-          <x>330</x>
-          <y>130</y>
-          <width>281</width>
-          <height>41</height>
-         </rect>
-        </property>
-       </widget>
-       <widget class="QLabel" name="label_32">
-        <property name="geometry">
-         <rect>
-          <x>140</x>
-          <y>130</y>
-          <width>151</width>
-          <height>31</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <family>Segoe UI</family>
-          <pointsize>20</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>Client Email</string>
-        </property>
-       </widget>
-       <widget class="QLineEdit" name="lineEdit_24">
-        <property name="geometry">
-         <rect>
-          <x>330</x>
-          <y>200</y>
-          <width>281</width>
-          <height>41</height>
-         </rect>
-        </property>
-       </widget>
-       <widget class="QLabel" name="label_33">
-        <property name="geometry">
-         <rect>
-          <x>140</x>
-          <y>200</y>
-          <width>161</width>
-          <height>31</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <family>Segoe UI</family>
-          <pointsize>20</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>Client Id</string>
-        </property>
-       </widget>
-      </widget>
-      <widget class="QWidget" name="tab_14">
-       <attribute name="title">
-        <string>Edit Or Delete A Client</string>
-       </attribute>
-       <widget class="QLineEdit" name="lineEdit_25">
-        <property name="geometry">
-         <rect>
-          <x>220</x>
-          <y>30</y>
-          <width>251</width>
-          <height>41</height>
-         </rect>
-        </property>
-       </widget>
-       <widget class="QLabel" name="label_42">
-        <property name="geometry">
-         <rect>
-          <x>40</x>
-          <y>30</y>
-          <width>161</width>
-          <height>31</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <family>Segoe UI</family>
-          <pointsize>20</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>CLient National Id</string>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="pushButton_23">
-        <property name="geometry">
-         <rect>
-          <x>520</x>
-          <y>400</y>
-          <width>251</width>
-          <height>51</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <family>Segoe UI</family>
-          <pointsize>21</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>Save Client Data</string>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="pushButton_24">
-        <property name="geometry">
-         <rect>
-          <x>530</x>
-          <y>30</y>
-          <width>311</width>
-          <height>51</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Search</string>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="pushButton_25">
-        <property name="geometry">
-         <rect>
-          <x>90</x>
-          <y>400</y>
-          <width>161</width>
-          <height>51</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Delete</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="label_36">
-        <property name="geometry">
-         <rect>
-          <x>170</x>
-          <y>140</y>
-          <width>151</width>
-          <height>31</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <family>Segoe UI</family>
-          <pointsize>20</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>Client Name</string>
-        </property>
-       </widget>
-       <widget class="QLineEdit" name="lineEdit_28">
-        <property name="geometry">
-         <rect>
-          <x>400</x>
-          <y>140</y>
-          <width>281</width>
-          <height>41</height>
-         </rect>
-        </property>
-       </widget>
-       <widget class="QLineEdit" name="lineEdit_27">
-        <property name="geometry">
-         <rect>
-          <x>400</x>
-          <y>210</y>
-          <width>281</width>
-          <height>41</height>
-         </rect>
-        </property>
-       </widget>
-       <widget class="QLabel" name="label_34">
-        <property name="geometry">
-         <rect>
-          <x>170</x>
-          <y>270</y>
-          <width>211</width>
-          <height>31</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <family>Segoe UI</family>
-          <pointsize>20</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>Client National Id</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="label_35">
-        <property name="geometry">
-         <rect>
-          <x>170</x>
-          <y>200</y>
-          <width>151</width>
-          <height>31</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <family>Segoe UI</family>
-          <pointsize>20</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>Client Email</string>
-        </property>
-       </widget>
-       <widget class="QLineEdit" name="lineEdit_26">
-        <property name="geometry">
-         <rect>
-          <x>400</x>
-          <y>280</y>
-          <width>281</width>
-          <height>41</height>
-         </rect>
-        </property>
        </widget>
       </widget>
      </widget>
@@ -1319,9 +986,9 @@
       <widget class="QLabel" name="label_16">
        <property name="geometry">
         <rect>
-         <x>40</x>
-         <y>110</y>
-         <width>81</width>
+         <x>30</x>
+         <y>120</y>
+         <width>101</width>
          <height>21</height>
         </rect>
        </property>
@@ -1332,7 +999,7 @@
       <widget class="QLabel" name="label_17">
        <property name="geometry">
         <rect>
-         <x>40</x>
+         <x>30</x>
          <y>220</y>
          <width>81</width>
          <height>21</height>
@@ -1345,9 +1012,9 @@
       <widget class="QLabel" name="label_18">
        <property name="geometry">
         <rect>
-         <x>40</x>
+         <x>30</x>
          <y>270</y>
-         <width>101</width>
+         <width>111</width>
          <height>21</height>
         </rect>
        </property>
@@ -1358,7 +1025,7 @@
       <widget class="QLabel" name="label_19">
        <property name="geometry">
         <rect>
-         <x>50</x>
+         <x>30</x>
          <y>170</y>
          <width>81</width>
          <height>21</height>
@@ -1649,6 +1316,125 @@
        </property>
       </widget>
      </widget>
+     <widget class="QGroupBox" name="groupBox_3">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>640</x>
+        <y>-50</y>
+        <width>381</width>
+        <height>581</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="title">
+       <string/>
+      </property>
+      <widget class="QLabel" name="label_29">
+       <property name="geometry">
+        <rect>
+         <x>80</x>
+         <y>90</y>
+         <width>231</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <family>Segoe UI</family>
+         <pointsize>22</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Apply New Theme ^_^</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="pushButton_18">
+       <property name="geometry">
+        <rect>
+         <x>200</x>
+         <y>190</y>
+         <width>131</width>
+         <height>121</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(48, 47, 47);
+color: rgb(255, 255, 255);</string>
+       </property>
+       <property name="text">
+        <string>Dark Blue</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="pushButton_19">
+       <property name="geometry">
+        <rect>
+         <x>60</x>
+         <y>190</y>
+         <width>131</width>
+         <height>121</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(50, 50, 50);
+color: rgb(255, 255, 255);</string>
+       </property>
+       <property name="text">
+        <string>Dark Orange</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="pushButton_20">
+       <property name="geometry">
+        <rect>
+         <x>200</x>
+         <y>320</y>
+         <width>131</width>
+         <height>121</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(25, 35, 45);
+color: rgb(255, 255, 255);</string>
+       </property>
+       <property name="text">
+        <string>QDark</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="pushButton_21">
+       <property name="geometry">
+        <rect>
+         <x>60</x>
+         <y>320</y>
+         <width>131</width>
+         <height>121</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(50, 50, 50);
+color: rgb(255, 255, 255);</string>
+       </property>
+       <property name="text">
+        <string>Dark Gray</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="pushButton_17">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>250</y>
+         <width>21</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>&gt;</string>
+       </property>
+      </widget>
+     </widget>
     </widget>
     <widget class="QWidget" name="tab_4">
      <attribute name="title">
@@ -1687,7 +1473,7 @@
         </property>
         <column>
          <property name="text">
-          <string>Category Name</string>
+          <string>Name</string>
          </property>
         </column>
        </widget>
@@ -1766,156 +1552,12 @@
      </size>
     </property>
    </widget>
-   <widget class="QGroupBox" name="groupBox_3">
-    <property name="enabled">
-     <bool>true</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>810</x>
-      <y>-20</y>
-      <width>381</width>
-      <height>581</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true"/>
-    </property>
-    <property name="title">
-     <string/>
-    </property>
-    <widget class="QLabel" name="label_29">
-     <property name="geometry">
-      <rect>
-       <x>80</x>
-       <y>90</y>
-       <width>231</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <family>Segoe UI</family>
-       <pointsize>22</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>Apply New Theme ^_^</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pushButton_18">
-     <property name="geometry">
-      <rect>
-       <x>200</x>
-       <y>190</y>
-       <width>131</width>
-       <height>121</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(48, 47, 47);
-color: rgb(255, 255, 255);</string>
-     </property>
-     <property name="text">
-      <string>Dark Blue</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pushButton_19">
-     <property name="geometry">
-      <rect>
-       <x>60</x>
-       <y>190</y>
-       <width>131</width>
-       <height>121</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(50, 50, 50);
-color: rgb(255, 255, 255);</string>
-     </property>
-     <property name="text">
-      <string>Dark Orange</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pushButton_20">
-     <property name="geometry">
-      <rect>
-       <x>200</x>
-       <y>320</y>
-       <width>131</width>
-       <height>121</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(25, 35, 45);
-color: rgb(255, 255, 255);</string>
-     </property>
-     <property name="text">
-      <string>QDark</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pushButton_21">
-     <property name="geometry">
-      <rect>
-       <x>60</x>
-       <y>320</y>
-       <width>131</width>
-       <height>121</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(50, 50, 50);
-color: rgb(255, 255, 255);</string>
-     </property>
-     <property name="text">
-      <string>Dark Gray</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pushButton_17">
-     <property name="geometry">
-      <rect>
-       <x>0</x>
-       <y>250</y>
-       <width>21</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>&gt;</string>
-     </property>
-    </widget>
-   </widget>
-   <widget class="QPushButton" name="pushButton_30">
-    <property name="geometry">
-     <rect>
-      <x>40</x>
-      <y>270</y>
-      <width>71</width>
-      <height>71</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="icon">
-     <iconset resource="icons.qrc">
-      <normaloff>:/icons/client.png</normaloff>:/icons/client.png</iconset>
-    </property>
-    <property name="iconSize">
-     <size>
-      <width>60</width>
-      <height>60</height>
-     </size>
-    </property>
-   </widget>
    <zorder>pushButton</zorder>
    <zorder>pushButton_2</zorder>
    <zorder>pushButton_4</zorder>
    <zorder>pushButton_5</zorder>
    <zorder>pushButton_26</zorder>
-   <zorder>groupBox_3</zorder>
    <zorder>tabWidget</zorder>
-   <zorder>pushButton_30</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
