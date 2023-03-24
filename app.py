@@ -15,6 +15,9 @@ login,_ = loadUiType('login.ui')
 class Login(QWidget , login):
     def __init__(self):
         QWidget.__init__(self)
+        style = open('themes/darkorange.css' , 'r')
+        style = style.read()
+        self.setStyleSheet(style)
         self.setupUi(self)
         self.pushButton.clicked.connect(self.Handel_Login)
 
@@ -44,7 +47,7 @@ class Login(QWidget , login):
 class MainApp(QMainWindow, ui):
     def __init__(self):
         QMainWindow.__init__(self)
-        style = open('themes/qdark.css' , 'r')
+        style = open('themes/darkorange.css' , 'r')
         style = style.read()
         self.setStyleSheet(style)
         self.setupUi(self)
@@ -164,6 +167,7 @@ class MainApp(QMainWindow, ui):
 
             row_position = self.tableWidget.rowCount()
             self.tableWidget.insertRow(row_position)
+        # self.show_book_combo()
 
     def Show_All_Operations_Teacher(self):
         self.db = MySQLdb.connect(host='127.0.0.1',user='root',password='',db='library',port=3306)
@@ -184,6 +188,8 @@ class MainApp(QMainWindow, ui):
 
             row_position = self.tableWidget_3.rowCount()
             self.tableWidget_3.insertRow(row_position)
+        # self.show_book_combo()
+
         
     def HandleOperationsStudent(self):
         self.db = MySQLdb.connect(host='127.0.0.1',user='root',password='',db='library',port=3306)
@@ -203,12 +209,24 @@ class MainApp(QMainWindow, ui):
         ''' ,(book_title , student_name , student_class ,days,today_date,to_date))
 
         self.db.commit()
+
+        self.cur.execute('''
+            SET @num := 0;
+
+            UPDATE dayoperations_student SET id = @num := (@num+1);
+
+            ALTER TABLE book AUTO_INCREMENT = 1;
+            
+            ''' )
+        # self.db.commit()
+        
         self.statusBar().showMessage('New Operation Added')
 
         self.lineEdit_29.setText('')
         self.lineEdit_57.setText('')
         self.comboBox_2.setCurrentIndex(0)
         self.Show_All_Operations_Student()
+        
 
     def updateOperation_Student(self):
         self.db = MySQLdb.connect(host='127.0.0.1',user='root',password='',db='library',port=3306)
@@ -259,8 +277,18 @@ class MainApp(QMainWindow, ui):
             INSERT INTO dayoperations_teacher(book_name,teacher_name,teacher_subject,days,date,date_to)
             VALUES (%s , %s , %s , %s ,%s , %s )
         ''' ,(book_title , teacher_name , teacher_subject ,days,today_date,to_date))
-        # self.cur.execute('''UPDATE book,dayoperations_teacher SET book.book_issued="YES" WHERE dayoperations_teacher.book_name=book.book_name ''')
         self.db.commit()
+        self.cur.execute('''
+            SET @num := 0;
+
+            UPDATE dayoperations_teacher SET id = @num := (@num+1);
+
+            ALTER TABLE book AUTO_INCREMENT = 1;
+            
+            ''' )
+        # self.db.commit()
+        
+
         self.statusBar().showMessage('New Operation Added')
 
         self.lineEdit_56.setText('')
@@ -296,6 +324,7 @@ class MainApp(QMainWindow, ui):
         self.cur.execute('''
             UPDATE dayoperations_teacher SET book_name=%s,teacher_name=%s,teacher_subject=%s,book_issued=%s,date=%s,date_to=%s WHERE id = %s            
         ''', (book_title, book_name,book_subject,book_issued,book_from,book_to,row_))
+
         self.cur.execute('''UPDATE book,dayoperations_teacher SET book.book_issued=dayoperations_teacher.book_issued WHERE dayoperations_teacher.book_name=book.book_name''')
         self.db.commit()
         self.statusBar().showMessage('Book Updated')
