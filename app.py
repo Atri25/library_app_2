@@ -117,7 +117,9 @@ class MainApp(QMainWindow, ui):
         
         # export operations
         self.pushButton_29.clicked.connect(self.Export_Day_Operation_Student)
+        self.pushButton_47.clicked.connect(self.Export_Day_Operation_Student_Returned)
         self.pushButton_45.clicked.connect(self.Export_Day_Operation_Teacher)
+        self.pushButton_46.clicked.connect(self.Export_Day_Operation_Teacher_Returned)
 
         # Themes
         self.pushButton_19.clicked.connect(self.Dark_Orange_Theme)
@@ -742,6 +744,64 @@ class MainApp(QMainWindow, ui):
         sheet1.write(0,3,'book issued')
         sheet1.write(0,4,'from - date')
         sheet1.write(0,5,'to - date')
+
+
+        row_number = 1
+        for row in data :
+            column_number = 0
+            for item in row :
+                sheet1.write(row_number , column_number , str(item))
+                column_number += 1
+            row_number += 1
+
+        wb.close()
+        self.statusBar().showMessage('Report Created Successfully')
+
+    def Export_Day_Operation_Student_Returned(self):
+        self.db = MySQLdb.connect(host='127.0.0.1',user='root',password='',db='library',port=3306)
+        self.cur = self.db.cursor()
+
+        self.cur.execute(''' 
+            SELECT book_name , student_name , date , date_to FROM dayoperations_student WHERE book_returned="NO" && NOW()>date_to 
+        ''')
+
+        data = self.cur.fetchall()
+        wb = Workbook('day_operations_std_not_returned.xlsx')
+        sheet1  = wb.add_worksheet()
+
+        sheet1.write(0,0,'book title')
+        sheet1.write(0,1,'student name')
+        sheet1.write(0,2,'from - date')
+        sheet1.write(0,3,'to - date')
+
+
+        row_number = 1
+        for row in data :
+            column_number = 0
+            for item in row :
+                sheet1.write(row_number , column_number , str(item))
+                column_number += 1
+            row_number += 1
+
+        wb.close()
+        self.statusBar().showMessage('Report Created Successfully')
+
+    def Export_Day_Operation_Teacher_Returned(self):
+        self.db = MySQLdb.connect(host='127.0.0.1',user='root',password='',db='library',port=3306)
+        self.cur = self.db.cursor()
+
+        self.cur.execute(''' 
+            SELECT book_name , teacher_name , date , date_to FROM dayoperations_teacher WHERE book_returned="NO" && NOW()>date_to 
+        ''')
+
+        data = self.cur.fetchall()
+        wb = Workbook('day_operations_teacher_not_returned.xlsx')
+        sheet1  = wb.add_worksheet()
+
+        sheet1.write(0,0,'book title')
+        sheet1.write(0,1,'teacher name')
+        sheet1.write(0,2,'from - date')
+        sheet1.write(0,3,'to - date')
 
 
         row_number = 1
