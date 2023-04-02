@@ -58,6 +58,8 @@ class MainApp(QMainWindow, ui):
         self.ShowAllBooks()
         self.Show_All_Operations_Student()
         self.Show_All_Operations_Teacher()
+        self.Book_Not_Issued_Teacher()
+        self.Book_Not_Issued_Student()
         self.show_category_combo()
         self.show_issued_combo()
         self.show_book_combo()
@@ -344,7 +346,47 @@ class MainApp(QMainWindow, ui):
         self.statusBar().showMessage('Book Updated')
         self.ShowAllBooks()
 
+    
+    def Book_Not_Issued_Teacher(self):
+        self.db = MySQLdb.connect(host='127.0.0.1',user='root',password='',db='library',port=3306)
+        self.cur = self.db.cursor()
 
+        self.cur.execute(''' 
+            SELECT book_name , teacher_name , date , date_to FROM dayoperations_teacher WHERE book_returned="NO" && NOW()>date_to 
+        ''')
+
+        data = self.cur.fetchall()
+
+        self.tableWidget_4.setRowCount(0)
+        self.tableWidget_4.insertRow(0)
+        for row , form in enumerate(data):
+            for column , item in enumerate(form):
+                self.tableWidget_4.setItem(row , column , QTableWidgetItem(str(item)))
+                column += 1
+
+            row_position = self.tableWidget_4.rowCount()
+            self.tableWidget_4.insertRow(row_position)
+    
+    def Book_Not_Issued_Student(self):
+        self.db = MySQLdb.connect(host='127.0.0.1',user='root',password='',db='library',port=3306)
+        self.cur = self.db.cursor()
+
+        self.cur.execute(''' 
+            SELECT book_name , student_name , date , date_to FROM dayoperations_student WHERE book_returned="NO" && NOW()>date_to 
+        ''')
+
+        data = self.cur.fetchall()
+
+        self.tableWidget_6.setRowCount(0)
+        self.tableWidget_6.insertRow(0)
+        for row , form in enumerate(data):
+            for column , item in enumerate(form):
+                self.tableWidget_6.setItem(row , column , QTableWidgetItem(str(item)))
+                column += 1
+
+            row_position = self.tableWidget_6.rowCount()
+            self.tableWidget_6.insertRow(row_position)
+        
 
 
     #################################
@@ -712,6 +754,8 @@ class MainApp(QMainWindow, ui):
 
         wb.close()
         self.statusBar().showMessage('Report Created Successfully')
+
+
 
     def Dark_Blue_Theme(self):
         style = open('themes/darkblue.css' , 'r')
