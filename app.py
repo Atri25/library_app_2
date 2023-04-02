@@ -609,10 +609,6 @@ class MainApp(QMainWindow, ui):
             self.db = MySQLdb.connect(host='127.0.0.1',user='root',password='',db='library',port=3306)
             self.cur = self.db.cursor()
 
-            # print(username)
-            # print(email)
-            # print(password)
-
             self.cur.execute('''
                 UPDATE users SET user_name=%s , user_email=%s , user_pass=%s WHERE user_name=%s
             ''', (username , email , password , original_name))
