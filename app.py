@@ -95,9 +95,11 @@ class MainApp(QMainWindow, ui):
 
         # add operations student
         self.pushButton_6.clicked.connect(self.HandleOperationsStudent)
-
+        # self.show_book_combo()
+        
         # add operations teacher
         self.pushButton_44.clicked.connect(self.HandleOperationsTeacher)
+        # self.show_book_combo()
 
         #add user
         self.pushButton_11.clicked.connect(self.Add_New_User)
@@ -208,8 +210,11 @@ class MainApp(QMainWindow, ui):
             VALUES (%s , %s , %s , %s ,%s , %s )
         ''' ,(book_title , student_name , student_class ,days,today_date,to_date))
 
+        self.cur.execute('''
+            UPDATE dayoperations_student,book SET book.book_issued="YES" WHERE dayoperations_student.book_name=book.book_name;
+            ''' )
         self.db.commit()
-
+        
         self.cur.execute('''
             SET @num := 0;
 
@@ -218,13 +223,16 @@ class MainApp(QMainWindow, ui):
             ALTER TABLE book AUTO_INCREMENT = 1;
             
             ''' )
-        # self.db.commit()
+        
         
         self.statusBar().showMessage('New Operation Added')
+
+        self.show_book_combo()
 
         self.lineEdit_29.setText('')
         self.lineEdit_57.setText('')
         self.comboBox_2.setCurrentIndex(0)
+        self.ShowAllBooks()
         self.Show_All_Operations_Student()
         
 
@@ -251,7 +259,6 @@ class MainApp(QMainWindow, ui):
         book_name = value_name
         book_from = value_from
         book_to = value_to
-        # book_price = value_price
 
 
         # print(value)
@@ -260,7 +267,9 @@ class MainApp(QMainWindow, ui):
         ''', (book_title, book_name,book_class,book_issued,book_from,book_to,row_))
         self.cur.execute('''UPDATE book,dayoperations_student SET book.book_issued=dayoperations_student.book_issued WHERE dayoperations_student.book_name=book.book_name''')
         self.db.commit()
+        self.show_book_combo()
         self.statusBar().showMessage('Book Updated')
+        self.ShowAllBooks()
 
     def HandleOperationsTeacher(self):
         self.db = MySQLdb.connect(host='127.0.0.1',user='root',password='',db='library',port=3306)
@@ -277,6 +286,9 @@ class MainApp(QMainWindow, ui):
             INSERT INTO dayoperations_teacher(book_name,teacher_name,teacher_subject,days,date,date_to)
             VALUES (%s , %s , %s , %s ,%s , %s )
         ''' ,(book_title , teacher_name , teacher_subject ,days,today_date,to_date))
+        self.cur.execute('''
+            UPDATE dayoperations_teacher,book SET book.book_issued="YES" WHERE dayoperations_teacher.book_name=book.book_name;
+            ''' )
         self.db.commit()
         self.cur.execute('''
             SET @num := 0;
@@ -286,14 +298,14 @@ class MainApp(QMainWindow, ui):
             ALTER TABLE book AUTO_INCREMENT = 1;
             
             ''' )
-        # self.db.commit()
-        
 
         self.statusBar().showMessage('New Operation Added')
 
         self.lineEdit_56.setText('')
         self.lineEdit_58.setText('')
         self.comboBox_8.setCurrentIndex(0)
+        self.show_book_combo()
+        self.ShowAllBooks()
         self.Show_All_Operations_Teacher()
 
     def updateOperation_Teacher(self):
@@ -327,7 +339,10 @@ class MainApp(QMainWindow, ui):
 
         self.cur.execute('''UPDATE book,dayoperations_teacher SET book.book_issued=dayoperations_teacher.book_issued WHERE dayoperations_teacher.book_name=book.book_name''')
         self.db.commit()
+        self.show_book_combo()
         self.statusBar().showMessage('Book Updated')
+        self.ShowAllBooks()
+
 
 
 
@@ -409,6 +424,7 @@ class MainApp(QMainWindow, ui):
             UPDATE book SET book_name=%s,book_description=%s,book_code=%s,book_issued=%s,book_category=%s,book_author=%s,book_publisher=%s,book_price=%s WHERE id = %s            
         ''', (book_title, book_description,book_code,book_issued,book_category,book_author,book_publisher,book_price,row_))
         self.db.commit()
+        self.show_book_combo()
         self.statusBar().showMessage('Book Updated')
 
     def Addnewbook(self):
@@ -442,6 +458,7 @@ class MainApp(QMainWindow, ui):
         self.lineEdit_41.setText('')
         self.lineEdit_42.setText('')
         self.lineEdit_4.setText('')
+        self.show_book_combo()
         
         self.ShowAllBooks()
 
@@ -521,6 +538,7 @@ class MainApp(QMainWindow, ui):
         data = self.cur.fetchall()  
 
         self.comboBox.clear()
+        self.comboBox_4.clear()
         for category in data :
             self.comboBox.addItem(category[0])
             self.comboBox_4.addItem(category[0])
