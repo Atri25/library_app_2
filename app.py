@@ -419,6 +419,7 @@ class MainApp(QMainWindow, ui):
         for row, form in enumerate(data):
             for column, item in enumerate(form):
                 self.tableWidget_5.setItem(row, column, QTableWidgetItem(str(item)))
+                print(form)
                 column += 1
 
             row_position = self.tableWidget_5.rowCount()
@@ -770,7 +771,7 @@ class MainApp(QMainWindow, ui):
     def Export_Day_Operation_Student_Returned(self):
         self.db = MySQLdb.connect(host='127.0.0.1',user='root',password='',db='library',port=3306)
         self.cur = self.db.cursor()
-
+    
         self.cur.execute(''' 
             SELECT book_name , student_name , date , date_to FROM dayoperations_student WHERE book_returned="NO" && NOW()>date_to 
         ''')
