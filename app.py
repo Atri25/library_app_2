@@ -5,6 +5,7 @@ import sys
 import MySQLdb
 import datetime
 from PyQt5.uic import loadUiType
+
 # from xlrd import *
 from xlsxwriter import *
 
@@ -13,7 +14,7 @@ ui,_ = loadUiType('library.ui')
 login,_ = loadUiType('login.ui')
 
 class Login(QWidget , login):
-    def __init__(self):
+    def __init__(self): 
         QWidget.__init__(self)
         style = open('themes/darkorange.css' , 'r')
         style = style.read()
@@ -63,6 +64,17 @@ class MainApp(QMainWindow, ui):
         self.show_category_combo()
         self.show_issued_combo()
         self.show_book_combo()
+        
+
+    def closeevent(self):
+        self.quit_msg = "Are you sure you want delete this"
+        self.reply = QMessageBox.question(self, 'Message', 
+                                             self.quit_msg, QMessageBox.Yes, QMessageBox.No)
+
+        if self.reply == QMessageBox.Yes:
+            self.deleteSelected()
+        else:
+            pass
 
     def Handel_ui_change(self):
         self.Hiding_Themes()
@@ -89,8 +101,8 @@ class MainApp(QMainWindow, ui):
         # self.pushButton_40.clicked.connect(self.updateSelectedSearch)
 
         ## delete selected book
-        self.pushButton_3.clicked.connect(self.deleteSelected)
-        # self.pushButton_16.clicked.connect(self.deleteSelected)
+        self.pushButton_3.clicked.connect(self.closeevent)
+        # self.pushButton_3.clicked.connect(self.deleteSelected)
 
         #add category
         self.pushButton_14.clicked.connect(self.Addcategory)
@@ -517,7 +529,7 @@ class MainApp(QMainWindow, ui):
         sql = '''SELECT book_name,book_description,book_code,book_issued,book_category,book_author,book_publisher,book_price FROM book WHERE book_name=%s'''
         if self.cur.execute(sql , [(book_title)],):
             data = self.cur.fetchall()
-            self.tableWidget_8.setRowCount(0)
+            self.tableWidget_8.setRowCount(0)                
             self.tableWidget_8.insertRow(0)
 
             for row, form in enumerate(data):
@@ -526,10 +538,7 @@ class MainApp(QMainWindow, ui):
                     column += 1
 
                 row_position = self.tableWidget_8.rowCount()
-                self.tableWidget_5.insertRow(row_position)
-
-
-            self.db.close()
+                self.tableWidget_8.insertRow(row_position)
 
 
     def Addcategory(self):
@@ -578,16 +587,17 @@ class MainApp(QMainWindow, ui):
     def show_book_combo(self):
         self.db = MySQLdb.connect(host='127.0.0.1',user='root',password='',db='library',port=3306)
         self.cur = self.db.cursor()
-        
-        self.cur.execute('''SELECT book_name FROM book WHERE book_issued="NO" ''')
-        data = self.cur.fetchall()  
 
+        self.cur.execute('''SELECT book_name FROM book WHERE book_issued="NO"''')
+        data = self.cur.fetchall()  
+        
         self.comboBox.clear()
         self.comboBox_4.clear()
         for category in data :
             self.comboBox.addItem(category[0])
             self.comboBox_4.addItem(category[0])
 
+        self.cur.fetchall()
 
     def show_issued_combo(self):
         self.comboBox_7.addItem("NO")
