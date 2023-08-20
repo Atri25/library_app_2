@@ -394,7 +394,7 @@ class MainApp(QMainWindow, ui):
         self.cur = self.db.cursor()
 
         self.cur.execute(''' 
-            SELECT book_name , student_name , date , date_to FROM dayoperations_student WHERE book_returned="NO" && NOW()>date_to 
+            SELECT book_name , student_name , student_class ,date , date_to FROM dayoperations_student WHERE book_returned="NO" && NOW()>date_to 
         ''')
 
         data = self.cur.fetchall()
