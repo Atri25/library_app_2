@@ -64,7 +64,9 @@ class MainApp(QMainWindow, ui):
         self.show_category_combo()
         self.show_issued_combo()
         self.show_book_combo()
-        
+        self.showcategorypage()
+        self.show_no_of_books()
+
 
     def closeevent(self):
         self.quit_msg = "Are you sure you want delete this"
@@ -98,7 +100,7 @@ class MainApp(QMainWindow, ui):
 
         ## update selected book
         self.pushButton_37.clicked.connect(self.updateSelected)
-        # self.pushButton_40.clicked.connect(self.updateSelectedSearch)
+        self.pushButton_39.clicked.connect(self.updateSelectedSearch)
 
         ## delete selected book
         self.pushButton_3.clicked.connect(self.closeevent)
@@ -127,11 +129,12 @@ class MainApp(QMainWindow, ui):
         # export books
         self.pushButton_27.clicked.connect(self.Export_Books)
         
-        # export operations
+        # Excel work
         self.pushButton_29.clicked.connect(self.Export_Day_Operation_Student)
         self.pushButton_47.clicked.connect(self.Export_Day_Operation_Student_Returned)
         self.pushButton_45.clicked.connect(self.Export_Day_Operation_Teacher)
         self.pushButton_46.clicked.connect(self.Export_Day_Operation_Teacher_Returned)
+        self.pushButton_32.clicked.connect(self.Import_books_csv)
 
         # Themes
         self.pushButton_19.clicked.connect(self.Dark_Orange_Theme)
@@ -143,7 +146,9 @@ class MainApp(QMainWindow, ui):
         self.pushButton_30.clicked.connect(self.updateOperation_Student)
         self.pushButton_31.clicked.connect(self.updateOperation_Teacher)
 
-
+        # settings
+        self.pushButton_35.clicked.connect(self.showcategorypage)
+        self.pushButton_35.clicked.connect(self.show_no_of_books)
 
     def Show_Themes(self):
         self.groupBox_3.show()
@@ -166,13 +171,15 @@ class MainApp(QMainWindow, ui):
     
     ######################################
     #############Operations###############
+    ######################################
+
 
     def Show_All_Operations_Student(self):
         self.db = MySQLdb.connect(host='127.0.0.1',user='root',password='',db='library',port=3306)
         self.cur = self.db.cursor()
 
         self.cur.execute(''' 
-            SELECT book_name , student_name , student_class , book_issued, date , date_to FROM dayoperations_student
+            SELECT book_name , student_name , student_class , book_returned,date , date_to FROM dayoperations_student
         ''')
 
         data = self.cur.fetchall()
@@ -193,7 +200,7 @@ class MainApp(QMainWindow, ui):
         self.cur = self.db.cursor()
 
         self.cur.execute(''' 
-            SELECT book_name , teacher_name , teacher_subject , book_issued ,date , date_to FROM dayoperations_teacher
+            SELECT book_name , teacher_name , teacher_subject , book_returned,date , date_to FROM dayoperations_teacher
         ''')
 
         data = self.cur.fetchall()
@@ -221,6 +228,7 @@ class MainApp(QMainWindow, ui):
         today_date = datetime.date.today()
         to_date = today_date + datetime.timedelta(days=days)
 
+        # self.cur.execute('''SELECT book_names FROM books WHERE book_issued="NO"''')
 
         self.cur.execute('''
             INSERT INTO dayoperations_student(book_name,student_name,student_class,days,date,date_to)
@@ -265,13 +273,13 @@ class MainApp(QMainWindow, ui):
         value_title = index.sibling(index.row(),0).data()
         value_name = index.sibling(index.row(),1).data()
         value_class = index.sibling(index.row(),2).data()
-        value_issued = index.sibling(index.row(),3).data()
+        value_returned = index.sibling(index.row(),3).data()
         value_from = index.sibling(index.row(),4).data()
         value_to = index.sibling(index.row(),5).data()
 
         #########Setting the values########### 
         book_title = value_title
-        book_issued = value_issued
+        book_returned = value_returned
         book_class = value_class
         book_name = value_name
         book_from = value_from
@@ -280,8 +288,8 @@ class MainApp(QMainWindow, ui):
 
         # print(value)
         self.cur.execute('''
-            UPDATE dayoperations_student SET book_name=%s,student_name=%s,student_class=%s,book_issued=%s,date=%s,date_to=%s WHERE id = %s            
-        ''', (book_title, book_name,book_class,book_issued,book_from,book_to,row_))
+            UPDATE dayoperations_student SET book_name=%s,student_name=%s,student_class=%s,book_returned=%s,date=%s,date_to=%s WHERE id = %s            
+        ''', (book_title, book_name,book_class,book_returned,book_from,book_to,row_))
         self.cur.execute('''UPDATE book,dayoperations_student SET book.book_issued=dayoperations_student.book_issued WHERE dayoperations_student.book_name=book.book_name''')
         self.db.commit()
         self.show_book_combo()
@@ -337,13 +345,13 @@ class MainApp(QMainWindow, ui):
         value_title = index.sibling(index.row(),0).data()
         value_name = index.sibling(index.row(),1).data()
         value_subject = index.sibling(index.row(),2).data()
-        value_issued = index.sibling(index.row(),3).data()
+        value_returned = index.sibling(index.row(),3).data()
         value_from = index.sibling(index.row(),4).data()
         value_to = index.sibling(index.row(),5).data()
 
         #########Setting the values########### 
         book_title = value_title
-        book_issued = value_issued
+        book_returned = value_returned
         book_subject = value_subject
         book_name = value_name
         book_from = value_from
@@ -351,8 +359,8 @@ class MainApp(QMainWindow, ui):
 
         # print(value)
         self.cur.execute('''
-            UPDATE dayoperations_teacher SET book_name=%s,teacher_name=%s,teacher_subject=%s,book_issued=%s,date=%s,date_to=%s WHERE id = %s            
-        ''', (book_title, book_name,book_subject,book_issued,book_from,book_to,row_))
+            UPDATE dayoperations_teacher SET book_name=%s,teacher_name=%s,teacher_subject=%s,book_returned=%s,date=%s,date_to=%s WHERE id = %s            
+        ''', (book_title, book_name,book_subject,book_returned,book_from,book_to,row_))
 
         self.cur.execute('''UPDATE book,dayoperations_teacher SET book.book_issued=dayoperations_teacher.book_issued WHERE dayoperations_teacher.book_name=book.book_name''')
         self.db.commit()
@@ -406,20 +414,23 @@ class MainApp(QMainWindow, ui):
     #################################
     #############Books###############
 
+
+
     def ShowAllBooks(self):
         self.db = MySQLdb.connect(host='127.0.0.1',user='root',password='',db='library',port=3306)
         self.cur = self.db.cursor()
         
         self.cur.execute('''SELECT book_name,book_description,book_code,book_issued,book_category,book_author,book_publisher,book_price FROM book ''' )
+
         data = self.cur.fetchall()
 
         self.tableWidget_5.setRowCount(0)
         self.tableWidget_5.insertRow(0)
 
+
         for row, form in enumerate(data):
             for column, item in enumerate(form):
                 self.tableWidget_5.setItem(row, column, QTableWidgetItem(str(item)))
-                print(form)
                 column += 1
 
             row_position = self.tableWidget_5.rowCount()
@@ -520,6 +531,44 @@ class MainApp(QMainWindow, ui):
         
         self.ShowAllBooks()
 
+    def updateSelectedSearch(self):
+        self.db = MySQLdb.connect(host='127.0.0.1', user='root', password='', db='library', port=3306)
+        self.cur = self.db.cursor()
+
+        index = self.tableWidget_8.selectionModel().currentIndex()
+        row = index.row()
+        row_ = row + 1
+
+        #########Taking values############
+        book_id=index.sibling(index.row(),0).data()
+        value_title = index.sibling(index.row(), 1).data()
+        value_description = index.sibling(index.row(), 2).data()
+        value_code = index.sibling(index.row(), 3).data()
+        value_issued = index.sibling(index.row(), 4).data()
+        value_category = index.sibling(index.row(), 5).data()
+        value_author = index.sibling(index.row(), 6).data()
+        value_publisher = index.sibling(index.row(), 7).data()
+        value_price = index.sibling(index.row(), 8).data()
+
+        #########Setting the values###########
+        book_title = value_title
+        book_code = value_code
+        book_issued = value_issued
+        book_description = value_description
+        book_category = value_category
+        book_author = value_author
+        book_publisher = value_publisher
+        book_price = value_price
+
+        # print(value)
+        self.cur.execute('''
+            UPDATE book SET book_name=%s,book_description=%s,book_code=%s,book_issued=%s,book_category=%s,book_author=%s,book_publisher=%s,book_price=%s WHERE id = %s            
+        ''', (
+        book_title, book_description, book_code, book_issued, book_category, book_author, book_publisher, book_price,
+        book_id))
+        self.db.commit()
+        self.show_book_combo()
+        self.statusBar().showMessage('Book Updated')
 
     def searchbooks(self):
         self.db = MySQLdb.connect(host='127.0.0.1',user='root',password='',db='library',port=3306)
@@ -527,7 +576,7 @@ class MainApp(QMainWindow, ui):
         
         book_title = self.lineEdit_5.text()
 
-        sql = '''SELECT book_name,book_description,book_code,book_issued,book_category,book_author,book_publisher,book_price FROM book WHERE book_name=%s'''
+        sql = '''SELECT id,book_name,book_description,book_code,book_issued,book_category,book_author,book_publisher,book_price FROM book WHERE book_name=%s'''
         if self.cur.execute(sql , [(book_title)],):
             data = self.cur.fetchall()
             self.tableWidget_8.setRowCount(0)                
@@ -541,6 +590,9 @@ class MainApp(QMainWindow, ui):
                 row_position = self.tableWidget_8.rowCount()
                 self.tableWidget_8.insertRow(row_position)
 
+    ############################
+    ##########Settings##########
+    ############################
 
     def Addcategory(self):
         self.db = MySQLdb.connect(host='127.0.0.1',user='root',password='',db='library',port=3306)
@@ -573,6 +625,49 @@ class MainApp(QMainWindow, ui):
                 row_position = self.tableWidget_2.rowCount()
                 self.tableWidget_2.insertRow(row_position)
 
+    def show_no_of_books(self):
+        self.db = MySQLdb.connect(host='127.0.0.1',user='root',password='',db='library',port=3306)
+        self.cur = self.db.cursor()
+        book_category = self.comboBox_13.currentText()
+
+        sql = '''select count(*) from book where book_category=%s'''
+        sql2 = '''select count(*) from book where book_category=%s && book_issued="YES" '''
+
+        if self.cur.execute(sql, [book_category], ):
+            data = self.cur.fetchall()
+            for row, form in enumerate(data):
+                for column, item in enumerate(form):
+                    self.label.setText("No of books in this category " + str(item))
+
+        if self.cur.execute(sql2, [book_category], ):
+            data = self.cur.fetchall()
+            for row, form in enumerate(data):
+                for column, item in enumerate(form):
+                    self.label_9.setText("No of books issued " + str(item))
+
+
+    def showcategorypage(self):
+        self.db = MySQLdb.connect(host='127.0.0.1',user='root',password='',db='library',port=3306)
+        self.cur = self.db.cursor()
+
+        sql = '''SELECT id,book_name,book_description,book_code,book_author,book_publisher FROM book WHERE book_category=%s'''
+        book_category = self.comboBox_13.currentText()
+
+        if self.cur.execute(sql, [(book_category)], ):
+            data = self.cur.fetchall()
+            self.tableWidget_15.setRowCount(0)
+            self.tableWidget_15.insertRow(0)
+
+
+            for row, form in enumerate(data):
+                for column, item in enumerate(form):
+                    self.tableWidget_15.setItem(row, column, QTableWidgetItem(str(item)))
+                    column += 1
+
+                row_position = self.tableWidget_15.rowCount()
+                self.tableWidget_15.insertRow(row_position)
+
+
     def show_category_combo(self):
         self.db = MySQLdb.connect(host='127.0.0.1',user='root',password='',db='library',port=3306)
         self.cur = self.db.cursor()
@@ -581,9 +676,10 @@ class MainApp(QMainWindow, ui):
         data = self.cur.fetchall()  
 
         self.comboBox_3.clear()
+        self.comboBox_13.clear()
         for category in data :
             self.comboBox_3.addItem(category[0])
-            # self.comboBox_5.addItem(category[0])
+            self.comboBox_13.addItem(category[0])
 
     def show_book_combo(self):
         self.db = MySQLdb.connect(host='127.0.0.1',user='root',password='',db='library',port=3306)
@@ -826,6 +922,25 @@ class MainApp(QMainWindow, ui):
         wb.close()
         self.statusBar().showMessage('Report Created Successfully')
 
+    def Import_books_csv(self):
+        self.db = MySQLdb.connect(host='127.0.0.1', user='root', password='', db='library', port=3306)
+        self.cur = self.db.cursor()
+
+        fname = QFileDialog.getOpenFileName(self,'Open File')
+        print(fname[0])
+
+
+        self.cur.execute('''
+                    LOAD DATA INFILE %s
+                    INTO TABLE book
+                    FIELDS TERMINATED BY ','
+                    ENCLOSED BY '"'
+                    LINES TERMINATED BY '\n'
+                ''',(fname[0],))
+
+        self.db.commit()
+
+        self.statusBar().showMessage('Done')
 
 
     def Dark_Blue_Theme(self):
@@ -850,7 +965,7 @@ class MainApp(QMainWindow, ui):
 
 def main():
     app = QApplication(sys.argv)
-    window = Login()
+    window = MainApp()
     window.show()
     app.exec_()
 
