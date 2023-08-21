@@ -89,8 +89,8 @@ class MainApp(QMainWindow, ui):
         # menu
         self.pushButton.clicked.connect(self.Open_day_to_day_tab)
         self.pushButton_2.clicked.connect(self.Open_books_tab)
-        self.pushButton_26.clicked.connect(self.Open_Users_tab)
-        self.pushButton_4.clicked.connect(self.Open_Settings_tab)
+        self.pushButton_26.clicked.connect(self.Open_Settings_tab)
+        self.pushButton_4.clicked.connect(self.Open_Users_tab)
 
         # add book
         self.pushButton_7.clicked.connect(self.Addnewbook)
@@ -392,7 +392,7 @@ class MainApp(QMainWindow, ui):
     def Book_Not_Issued_Student(self):
         self.db = MySQLdb.connect(host='127.0.0.1',user='root',password='',db='library',port=3306)
         self.cur = self.db.cursor()
-s
+
         self.cur.execute(''' 
             SELECT book_name , student_name , student_class ,date , date_to FROM dayoperations_student WHERE book_returned="NO" && NOW()>date_to 
         ''')
@@ -966,11 +966,10 @@ s
 
 def main():
     app = QApplication(sys.argv)
-    window = MainApp()
+    window = Login()
     window.show()
     app.exec_()
 
 
 if __name__ == '__main__':
     main()
-        
