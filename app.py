@@ -392,9 +392,9 @@ class MainApp(QMainWindow, ui):
     def Book_Not_Issued_Student(self):
         self.db = MySQLdb.connect(host='127.0.0.1',user='root',password='',db='library',port=3306)
         self.cur = self.db.cursor()
-
+s
         self.cur.execute(''' 
-            SELECT book_name , student_name , date , date_to FROM dayoperations_student WHERE book_returned="NO" && NOW()>date_to 
+            SELECT book_name , student_name , student_class ,date , date_to FROM dayoperations_student WHERE book_returned="NO" && NOW()>date_to 
         ''')
 
         data = self.cur.fetchall()
@@ -942,6 +942,7 @@ class MainApp(QMainWindow, ui):
 
         self.statusBar().showMessage('Done')
 
+        # ShowAllBooks()
 
     def Dark_Blue_Theme(self):
         style = open('themes/darkblue.css' , 'r')

@@ -1,13 +1,1 @@
-﻿id,book_name,book_description,book_code,book_issued,book_category,book_price,book_author,book_publisher
-1,1984,story book,7895,NO,stories,450,George Orwell, Secker & Warburg 
-2,rich dad poor dad,finance book,4657,NO,self-help,750,Robert Kiyosaki,Warner Books
-3,mahabharat,epic,6858,NO,religious book,540,---,---
-4,Furia,A novel about a rising soccer star,4687,NO,sports,840,Yamile Saied ,---
-5,all in one physics class 10,class 10 icse physics,8948,NO,academics ,548,OP Malhotra,Arihant
-6,all in one chemistry class 12,class 12 chem book,6454,NO,academics ,121,OP Malhotra,Arihant
-,,,,,,,,
-,,,,,,,,
-,,,,,,,,
-,,,,,,,,
-,,,,,,,,
-,,,,,,,,
+﻿7,inmo arihant,olympiad,6871,NO,academics ,671,Rajeev,Arihant
