@@ -8,6 +8,8 @@ from PyQt5.uic import loadUiType
 
 # from xlrd import *
 from xlsxwriter import *
+import pandas as pd
+from sqlalchemy import create_engine
 
 ui,_ = loadUiType('library.ui')
 
@@ -770,7 +772,6 @@ class MainApp(QMainWindow, ui):
 
         else:
             self.statusBar().showMessage('User Data NOT Updated ')
-            # print('make sure you entered you password correctly')
 
     def Export_Books(self):
         self.db = MySQLdb.connect(host='127.0.0.1',user='root',password='',db='library',port=3306)
@@ -914,34 +915,27 @@ class MainApp(QMainWindow, ui):
         row_number = 1
         for row in data :
             column_number = 0
-            for item in row :
+            for item in row:
                 sheet1.write(row_number , column_number , str(item))
                 column_number += 1
             row_number += 1
 
         wb.close()
         self.statusBar().showMessage('Report Created Successfully')
+        self.ShowAllBooks()
+
 
     def Import_books_csv(self):
         self.db = MySQLdb.connect(host='127.0.0.1', user='root', password='', db='library', port=3306)
         self.cur = self.db.cursor()
 
         fname = QFileDialog.getOpenFileName(self,'Open File')
-        print(fname[0])
+        df = pd.read_csv(fname[0])
 
-
-        self.cur.execute('''
-                    LOAD DATA INFILE %s
-                    INTO TABLE book
-                    FIELDS TERMINATED BY ','
-                    ENCLOSED BY '"'
-                    LINES TERMINATED BY '\n'
-                ''',(fname[0],))
-
-        self.db.commit()
+        engine = create_engine('mysql://root:@127.0.0.1/library')
+        df.to_sql(name='book', con=engine, if_exists='append')
 
         self.statusBar().showMessage('Done')
-
 
     def Dark_Blue_Theme(self):
         style = open('themes/darkblue.css' , 'r')
